@@ -11,6 +11,7 @@ export const Header = () => {
             <input
               type="text"
               placeholder="Buscar Bebida"
+              name="search"
               className="border border-gray-300 rounded-md px-3 py-1 w-full md:w-auto"
             />
             <button
