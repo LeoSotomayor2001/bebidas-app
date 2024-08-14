@@ -5,5 +5,8 @@ export const tiposBebida = [
     { label: 'Vodka', value: 'vodka' },
     { label: 'Ron', value: 'ron' },
     { label: 'Tequila', value: 'tequila' },
+    {label: 'Café', value: 'cafe'},
+    {label: 'Te', value: 'te'},
+    {label: 'Jugo', value: 'jugos'},
     {label: 'Refresco', value: 'refresco'}
 ];
