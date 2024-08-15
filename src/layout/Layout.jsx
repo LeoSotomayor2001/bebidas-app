@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 
 export const Layout = () => {
   return (
-    <div className="overflow-x-hidden min-h-screen flex flex-col">
+    <div className=" min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
         <Outlet /> {/* Aquí se renderizarán las rutas hijas */}

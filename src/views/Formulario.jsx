@@ -30,7 +30,7 @@ export const Formulario = () => {
   };
 
   const onImageSelect = (e) => {
-    setFormData({ ...formData, imagen: e.files[0].name });
+    setFormData({ ...formData, imagen: e.files[0] });
     toast.current.show({ severity: 'info', summary: 'Imagen Seleccionada', detail: `${e.files[0].name} fue seleccionada exitosamente.` });
   };
 
@@ -38,13 +38,18 @@ export const Formulario = () => {
     e.preventDefault();
 
     setErrors({});  // Limpiar los errores previos
+
+    // Crear un objeto FormData y agregarle los datos del formulario
+    const formDataObj = new FormData();
+    formDataObj.append('nombre', formData.nombre);
+    formDataObj.append('tipo', formData.tipo);
+    formDataObj.append('imagen', formData.imagen);  // Este es el archivo de imagen
+
     try {
       const response = await fetch(import.meta.env.MODE === 'production' ? "" : 'http://127.0.0.1:8000/api/bebidas', {
         method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
+        // No es necesario establecer Content-Type cuando usas FormData, ya que el navegador lo hace automáticamente.
+        body: formDataObj
       });
 
       const data = await response.json();
@@ -61,6 +66,7 @@ export const Formulario = () => {
           Object.values(errorMessages).forEach(error => {
             toast.current.show({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
           });
+          console.log(errors);
         } 
         else {
           toast.current.show({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al crear la bebida', life: 3000 });
@@ -69,27 +75,24 @@ export const Formulario = () => {
     } catch (error) {
       toast.current.show({ severity: 'error', summary: 'Error', detail: 'Error de conexión', life: 3000 });
     }
-  };
+};
 
   return (
     <div className="md:w-6/12 p-4 m-auto">
-      <form className="border border-gray-300 p-4 m-auto w-3/4 bg-slate-200 shadow-md" onSubmit={onSubmit}>
+      <form className="border border-gray-300 p-4 m-auto md:w-3/4 bg-slate-200 shadow-md" onSubmit={onSubmit}>
         <h1 className="text-3xl font-bold mb-4 text-center">Crear Bebida</h1>
-        <div className="grid lg:grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
             <FloatLabel>
-              <InputText id="nombre" value={formData.nombre} onChange={onChange} />
+              <InputText id="nombre" value={formData.nombre} onChange={onChange} className="w-full"/>
               <label htmlFor="nombre">Nombre</label>
             </FloatLabel>
-           
-          </div>
 
-          <div>
             <FloatLabel>
-              <Dropdown id="tipo" value={formData.tipo} options={tipos} onChange={onDropdownChange} placeholder="Selecciona un tipo" />
+              <Dropdown id="tipo" value={formData.tipo} options={tipos} onChange={onDropdownChange} placeholder="Selecciona un tipo" className="w-full m-0"/>
               <label htmlFor="tipo">Tipo</label>
             </FloatLabel>
-          </div>
+
 
           <div>
             <FileUpload
@@ -99,12 +102,13 @@ export const Formulario = () => {
               accept="image/*"
               mode="basic"
               onSelect={onImageSelect}
+              className="w-full"
             />
           </div>
 
           <Toast ref={toast} />
 
-          <button className="bg-blue-600 text-white rounded-md px-3 py-1 mt-2 md:mt-0 md:ml-2" type="submit">
+          <button className="bg-blue-600 text-white rounded-md px-3 py-1 mt-2 md:mt-0 md:ml-2 w-full" type="submit">
             Crear
           </button>
         </div>
