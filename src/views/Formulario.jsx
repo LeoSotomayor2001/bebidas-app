@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { tiposBebida } from "../data/data";
 import { FileUpload } from 'primereact/fileupload';
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const Formulario = () => {
   const initialState={
@@ -12,6 +13,7 @@ export const Formulario = () => {
     tipo: '',
     imagen: null
   }
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
 
   const [errors, setErrors] = useState({});  // Estado para almacenar los errores de la API
@@ -57,6 +59,10 @@ export const Formulario = () => {
       if (response.ok) {
         toast.current.show({ severity: 'success', summary: 'Bebida Creada', life: 3000 });
         setFormData(initialState);  // Resetear el formulario
+        setTimeout(() => {
+          navigate('/')
+          
+        }, 2000);
       } 
       else {
         // Manejo de errores de la API
@@ -66,7 +72,6 @@ export const Formulario = () => {
           Object.values(errorMessages).forEach(error => {
             toast.current.show({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
           });
-          console.log(errors);
         } 
         else {
           toast.current.show({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al crear la bebida', life: 3000 });
