@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
@@ -6,14 +6,15 @@ import { Toast } from "primereact/toast";
 import { tiposBebida } from "../data/data";
 import { FileUpload } from "primereact/fileupload";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export const Formulario = ({ bebida=null}) => {
+export const Formulario = ({ bebida = null }) => {
   const initialState = bebida || {
     nombre: "",
     tipo: "",
     imagen: null,
   };
-  
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
@@ -37,55 +38,73 @@ export const Formulario = ({ bebida=null}) => {
       detail: `${e.files[0].name} fue seleccionada exitosamente.`,
     });
   };
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
-  
-    setErrors({});  
+
+    setErrors({});
     const formDataObj = new FormData();
-    formDataObj.append('nombre', formData.nombre);
-    formDataObj.append('tipo', formData.tipo);
-    formDataObj.append('imagen', formData.imagen);
-  
+    formDataObj.append("nombre", formData.nombre);
+    formDataObj.append("tipo", formData.tipo);
+
+    if (formData.imagen) {
+      formDataObj.append("imagen", formData.imagen);
+    }
+
     try {
-      let url = 'http://127.0.0.1:8000/api/bebidas';
-      let method = 'POST';
-  
-      // Verificar si la bebida existe
+      let url = "http://127.0.0.1:8000/api/bebidas";
+      let method = "POST";
+
+      // Verificar si la bebida existe (para editar)
       if (bebida && bebida.id) {
         url = `http://127.0.0.1:8000/api/bebidas/${bebida.id}`;
-        method = 'PUT';
+        method = "PUT";
       }
-  
-      const response = await fetch(import.meta.env.MODE === 'production' ? url : url, {
-        method,
-        body: formDataObj
-      });
-  
-      const data = await response.json();
 
-      if (response.ok) {
-        toast.current.show({ severity: 'success', summary: method === 'POST' ? 'Bebida Creada' : 'Bebida Actualizada', life: 2000 });
-        setFormData(initialState); 
+      const response = await axios({
+        method,
+        url,
+        data: formDataObj,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response)
+
+      if (response.status === 200) {
+        toast.current.show({
+          severity: "success",
+          summary:
+            method === "POST" ? "Bebida Creada" : "Bebida Actualizada",
+          life: 2000,
+        });
+        setFormData(initialState);
         setTimeout(() => {
-          navigate('/')
+          navigate("/");
         }, 2000);
-      } 
-      else {
-        // Manejo de errores de la API
-        if (data.errors) {
-          const errorMessages = data.errors;
-          setErrors(errorMessages);
-          Object.values(errorMessages).forEach(error => {
-            toast.current.show({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
-          });
-        } 
-        else {
-          toast.current.show({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al ${method === 'POST' ? 'crear' : 'actualizar'} la bebida`, life: 3000 });
-        }
       }
     } catch (error) {
-      toast.current.show({ severity: 'error', summary: 'Error', detail: 'Error de conexión', life: 3000 });
+      if (error.response && error.response.data.errors) {
+        const errorMessages = error.response.data.errors;
+        setErrors(errorMessages);
+        Object.values(errorMessages).forEach((error) => {
+          toast.current.show({
+            severity: "error",
+            summary: "Error",
+            detail: error.message,
+            life: 3000,
+          });
+        });
+      } else {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: `Ocurrió un error al ${
+            method === "POST" ? "crear" : "actualizar"
+          } la bebida`,
+          life: 3000,
+        });
+      }
     }
   };
 
@@ -103,6 +122,7 @@ export const Formulario = ({ bebida=null}) => {
             <InputText
               id="nombre"
               value={formData.nombre}
+              name="nombre"
               onChange={onChange}
               className="w-full"
             />
@@ -112,6 +132,7 @@ export const Formulario = ({ bebida=null}) => {
             <Dropdown
               id="tipo"
               value={formData.tipo}
+              name="tipo"
               options={tipos}
               onChange={onDropdownChange}
               placeholder="Selecciona un tipo"
