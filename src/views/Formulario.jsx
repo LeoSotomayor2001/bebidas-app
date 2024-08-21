@@ -8,7 +8,7 @@ import { FileUpload } from "primereact/fileupload";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const Formulario = ({ bebida = null }) => {
+export const Formulario = ({ bebida = null, closeModal=null }) => {
   const initialState = bebida || {
     nombre: "",
     tipo: "",
@@ -58,7 +58,7 @@ export const Formulario = ({ bebida = null }) => {
       // Verificar si la bebida existe (para editar)
       if (bebida && bebida.id) {
         url = `http://127.0.0.1:8000/api/bebidas/${bebida.id}`;
-        method = "PUT";
+        formDataObj.append("_method", "PUT");
       }
 
       const response = await axios({
@@ -72,16 +72,30 @@ export const Formulario = ({ bebida = null }) => {
       console.log(response)
 
       if (response.status === 200) {
-        toast.current.show({
-          severity: "success",
-          summary:
-            method === "POST" ? "Bebida Creada" : "Bebida Actualizada",
-          life: 2000,
-        });
-        setFormData(initialState);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+       
+        if(bebida){
+          toast.current.show({
+            severity: "success",
+            summary: "Bebida editada",
+            life: 2000,
+          });
+          setTimeout(() => {
+            closeModal();
+            
+          }, 2000);
+        }
+        else{
+          toast.current.show({
+            severity: "success",
+            summary:
+              "Bebida Creada",
+            life: 2000,
+          });
+          setFormData(initialState);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        }
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {

@@ -142,7 +142,7 @@ export const Index = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
       >
-        <Formulario bebida={bebidaEditar}/>
+        <Formulario bebida={bebidaEditar} closeModal={closeModal}/>
       </ModalEditarBebida>
     </div>
   );
