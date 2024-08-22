@@ -1,127 +1,25 @@
-import { useRef, useState } from "react";
+
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import { tiposBebida } from "../data/data";
 import { FileUpload } from "primereact/fileupload";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+import { useBebidaForm } from "../hooks/useBebidaForm";
 
 export const Formulario = ({ bebida = null, closeModal=null }) => {
-  const initialState = bebida || {
-    nombre: "",
-    tipo: "",
-    imagen: null,
-  };
+  const {
+    formData,
+    errors,
+    toast,
+    onChange,
+    onDropdownChange,
+    onImageSelect,
+    onSubmit,
+  } = useBebidaForm(bebida, closeModal);
 
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(initialState);
-  const [errors, setErrors] = useState({});
-  const toast = useRef(null);
   const tipos = tiposBebida;
-
-  const onChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-  };
-
-  const onDropdownChange = (e) => {
-    setFormData({ ...formData, tipo: e.value });
-  };
-
-  const onImageSelect = (e) => {
-    setFormData({ ...formData, imagen: e.files[0] });
-    toast.current.show({
-      severity: "info",
-      summary: "Imagen Seleccionada",
-      detail: `${e.files[0].name} fue seleccionada exitosamente.`,
-    });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    setErrors({});
-    const formDataObj = new FormData();
-    formDataObj.append("nombre", formData.nombre);
-    formDataObj.append("tipo", formData.tipo);
-
-    if (formData.imagen) {
-      formDataObj.append("imagen", formData.imagen);
-    }
-
-    try {
-      let url = "http://127.0.0.1:8000/api/bebidas";
-      let method = "POST";
-
-      // Verificar si la bebida existe (para editar)
-      if (bebida && bebida.id) {
-        url = `http://127.0.0.1:8000/api/bebidas/${bebida.id}`;
-        formDataObj.append("_method", "PUT");
-      }
-
-      const response = await axios({
-        method,
-        url,
-        data: formDataObj,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(response)
-
-      if (response.status === 200) {
-       
-        if(bebida){
-          toast.current.show({
-            severity: "success",
-            summary: "Bebida editada",
-            life: 2000,
-          });
-          setTimeout(() => {
-            closeModal();
-            
-          }, 2000);
-        }
-        else{
-          toast.current.show({
-            severity: "success",
-            summary:
-              "Bebida Creada",
-            life: 2000,
-          });
-          setFormData(initialState);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
-      }
-    } catch (error) {
-      if (error.response && error.response.data.errors) {
-        const errorMessages = error.response.data.errors;
-        setErrors(errorMessages);
-        Object.values(errorMessages).forEach((error) => {
-          toast.current.show({
-            severity: "error",
-            summary: "Error",
-            detail: error.message,
-            life: 3000,
-          });
-        });
-      } else {
-        toast.current.show({
-          severity: "error",
-          summary: "Error",
-          detail: `Ocurrió un error al ${
-            method === "POST" ? "crear" : "actualizar"
-          } la bebida`,
-          life: 3000,
-        });
-      }
-    }
-  };
-
   return (
     <div className="md:w-6/12 p-4 m-auto">
       <form
