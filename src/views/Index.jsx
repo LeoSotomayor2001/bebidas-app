@@ -4,6 +4,7 @@ import { Toast } from "primereact/toast";
 import Swal from "sweetalert2";
 import { ModalEditarBebida } from "../components/ModalEditarBebida";
 import { Formulario } from "./Formulario";
+import useBebida from "../hooks/useBebida";
 
 export const Index = () => {
   const [bebidas, setBebidas] = useState([]);
@@ -11,12 +12,12 @@ export const Index = () => {
   const [bebidaEditar, setBebidaEditar] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useRef(null);
-
+  const {bebidasBuscadas} = useBebida();
   const openModal = (bebida) => {
     setBebidaEditar(bebida);
     setModalIsOpen(true);
   };
-
+  
   const closeModal = () => {
     setModalIsOpen(false);
     setBebidaEditar(null);
@@ -37,8 +38,17 @@ export const Index = () => {
 
   useEffect(() => {
     mostrarBebidas();
+    
   }, []);
-
+  useEffect(() => {
+    // Si bebidasBuscadas tiene contenido, actualiza el estado bebidas
+    if (bebidasBuscadas && bebidasBuscadas.length > 0) {
+      setBebidas(bebidasBuscadas);
+    }
+    if(bebidasBuscadas && bebidasBuscadas.length === 0){
+      setBebidas([]);
+    }
+  }, [bebidasBuscadas]);
   if (loading) {
     return <Spinner />;
   }
