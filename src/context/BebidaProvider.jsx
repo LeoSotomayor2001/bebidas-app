@@ -5,6 +5,7 @@ const BebidaContext=createContext();
 
 const BebidaProvider=({children})=>{
     const [bebidasBuscadas, setBebidasBuscadas] = useState({})
+    const [isValidUser, setIsValidUser] = useState(false)
 
     const BuscarBebidas=async(nombre)=>{
         let url = `http://127.0.0.1:8000/api/bebidas/search?nombre=${nombre}`;
@@ -21,7 +22,9 @@ const BebidaProvider=({children})=>{
     return (
         <BebidaContext.Provider value={{
             BuscarBebidas,
-            bebidasBuscadas
+            bebidasBuscadas,
+            isValidUser,
+            setIsValidUser
         }}>
             {children}
         </BebidaContext.Provider>

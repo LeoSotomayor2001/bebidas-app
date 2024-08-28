@@ -1,7 +1,19 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
+import useBebida from "../hooks/useBebida";
+import { useEffect } from "react";
 
 export const Layout = () => {
+  const { isValidUser } = useBebida()
+  const navigate = useNavigate()
+
+useEffect(()=>{
+  if(!isValidUser){
+    navigate("/auth")
+  }
+}, [isValidUser, navigate])
+
+
   return (
     <div className=" min-h-screen flex flex-col">
       <Header />

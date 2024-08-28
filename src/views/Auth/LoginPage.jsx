@@ -1,14 +1,17 @@
 import axios from "axios";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
+import useBebida from "../../hooks/useBebida";
+
 
 export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('')
   const [errors, setErrors] = useState([])
+  const { setIsValidUser } = useBebida()
   const toast = useRef(null);
   const navigate=useNavigate()
   const onChange = (e) => {
@@ -33,6 +36,7 @@ export const LoginPage = () => {
         }
       );
       if(data){
+        setIsValidUser(true)
         toast.current.show({severity:'success', summary: 'Iniciando sesión', detail: data.message, life: 3000});
         setEmail('');
         setPassword('');
