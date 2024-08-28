@@ -52,7 +52,6 @@ export const RegisterPage = () => {
         }, 1000);
       }
     } catch (error) {
-      console.log(error.response.data);
       setErrors(error.response.data); 
       setTimeout(() => {
         setErrors([]);
