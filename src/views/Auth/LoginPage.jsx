@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import useBebida from "../../hooks/useBebida";
+import { useEffect } from "react";
 
 
 export const LoginPage = () => {
@@ -19,6 +20,7 @@ export const LoginPage = () => {
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
   };
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setErrors([])
@@ -43,6 +45,8 @@ export const LoginPage = () => {
         setTimeout(() => {
           navigate('/');
         }, 2000);
+        localStorage.setItem('token',data.token);
+        localStorage.setItem('user',JSON.stringify(data.user))
       }
       
     } catch (error) {
@@ -56,6 +60,7 @@ export const LoginPage = () => {
     }
 
   }
+ 
   
   return (
     <form className="border border-gray-200 p-6 mx-auto md:w-2/3 lg:w-3/4 shadow-xl rounded-xl bg-white" onSubmit={onSubmit}>

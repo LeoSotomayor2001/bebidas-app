@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <LoginPage/>
       },
       {
-        path:'/registro',
+        path:"/auth/registro",
         element:<RegisterPage/>
       }
     ]

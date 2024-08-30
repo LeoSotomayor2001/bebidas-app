@@ -1,5 +1,14 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
 export const AuthLayout = () => {
+    const navigate=useNavigate();
+    const token= localStorage.getItem('token');
+    useEffect(() => {
+      if(token){
+        navigate('/')
+      }
+    }, [token,navigate])
+    
   return (
     <main className='max-w-4xl m-auto mt-10 md:mt-28 flex flex-col md:flex-row items-center'>
       <img

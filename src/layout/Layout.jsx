@@ -4,14 +4,13 @@ import useBebida from "../hooks/useBebida";
 import { useEffect } from "react";
 
 export const Layout = () => {
-  const { isValidUser } = useBebida()
   const navigate = useNavigate()
-
+  const token= localStorage.getItem('token');
 useEffect(()=>{
-  if(!isValidUser){
+  if(!token){
     navigate("/auth")
   }
-}, [isValidUser, navigate])
+}, [token, navigate])
 
 
   return (

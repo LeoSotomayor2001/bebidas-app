@@ -135,7 +135,7 @@ export const RegisterPage = () => {
         </button>
       </div>
       <div className="my-5">
-        <Link to="/auth/login" className="text-blue-600 text-sm">
+        <Link to="/auth/" className="text-blue-600 text-sm">
           ¿Ya tienes una cuenta? Inicia Sesión
         </Link>
       </div>

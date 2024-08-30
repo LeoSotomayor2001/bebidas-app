@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useBebida from "../hooks/useBebida";
 
 export const Header = () => {
   const {BuscarBebidas}=useBebida();
+  const navigate=useNavigate();
   const [nombre, setNombre] = useState()
+  const user = JSON.parse(localStorage.getItem('user'));
   const handleChange = (e) => {
     setNombre(e.target.value);
 };
@@ -12,6 +14,11 @@ export const Header = () => {
   const handleClickSubmit=(e)=>{
     e.preventDefault()
     BuscarBebidas(nombre)
+  }
+  const logout=()=>{
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    navigate('/auth')
   }
   return (
     <header className="border-b border-gray-200 bg-white shadow-md">
@@ -39,6 +46,9 @@ export const Header = () => {
 
         <nav className="text-lg mt-2 md:mt-0">
           <ul className="flex flex-col md:flex-row gap-4 md:gap-8 justify-center items-center">
+            <h2 className="font-bold text-xl">
+              {user && user.name}
+            </h2>
             <li>
               <NavLink
                 to="/"
@@ -62,6 +72,11 @@ export const Header = () => {
               >
                 Crear Bebida
               </NavLink>
+            </li>
+            <li>
+              <button type="button" className="text-red-500  hover:text-black" onClick={logout}>
+                Cerrar Sesión
+              </button>
             </li>
           </ul>
         </nav>

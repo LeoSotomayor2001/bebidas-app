@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { ModalEditarBebida } from "../components/ModalEditarBebida";
 import { Formulario } from "./Formulario";
 import useBebida from "../hooks/useBebida";
+import { json } from "react-router-dom";
 
 export const Index = () => {
   const [bebidas, setBebidas] = useState([]);
@@ -13,6 +14,8 @@ export const Index = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useRef(null);
   const {bebidasBuscadas} = useBebida();
+
+
   const openModal = (bebida) => {
     setBebidaEditar(bebida);
     setModalIsOpen(true);
