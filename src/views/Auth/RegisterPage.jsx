@@ -47,9 +47,11 @@ export const RegisterPage = () => {
         setEmail('');
         setPassword('');
         setPassword_confirmation('');
+        localStorage.setItem('token',data.token);
+        localStorage.setItem('user',JSON.stringify(data.user))
         setTimeout(() => {
-          navigate('/auth/login');
-        }, 1000);
+          navigate('/');
+        }, 2000);
       }
     } catch (error) {
       setErrors(error.response.data); 

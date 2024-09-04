@@ -6,11 +6,17 @@ const BebidaContext=createContext();
 const BebidaProvider=({children})=>{
     const [bebidasBuscadas, setBebidasBuscadas] = useState({})
     const [isValidUser, setIsValidUser] = useState(false)
-
+    const token= localStorage.getItem('token');
     const BuscarBebidas=async(nombre)=>{
         let url = `http://127.0.0.1:8000/api/bebidas/search?nombre=${nombre}`;
         try{
-            const {data} = await axios.get(url)
+            const {data} = await axios.get(url,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
             //console.log(data.bebidas)
             setBebidasBuscadas(data.bebidas)
         }

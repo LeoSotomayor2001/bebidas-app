@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useBebida from "../hooks/useBebida";
+import axios from "axios";
 
 export const Header = () => {
   const {BuscarBebidas}=useBebida();
   const navigate=useNavigate();
   const [nombre, setNombre] = useState()
   const user = JSON.parse(localStorage.getItem('user'));
+  const token=localStorage.getItem('token');
   const handleChange = (e) => {
     setNombre(e.target.value);
 };
@@ -15,7 +17,20 @@ export const Header = () => {
     e.preventDefault()
     BuscarBebidas(nombre)
   }
-  const logout=()=>{
+  const logout=async()=>{
+
+    
+    try {
+        const { data } = await axios.post('http://127.0.0.1:8000/api/logout', 
+        { user }, 
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     navigate('/auth')

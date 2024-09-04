@@ -64,6 +64,7 @@ export const Index = () => {
       showCancelButton: true,
       confirmButtonColor: "#3773ff",
       cancelButtonColor: "#8d0f0f",
+      cancelButtonText:'Cancelar',
       confirmButtonText: "Sí, Eliminar!",
     }).then(async (result) => {
       if (result.isConfirmed) {
