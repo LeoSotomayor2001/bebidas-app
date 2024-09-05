@@ -13,7 +13,7 @@ export const Index = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useRef(null);
   const {bebidasBuscadas} = useBebida();
-
+  const token= localStorage.getItem('token');
 
 
   const openModal = (bebida) => {
@@ -28,7 +28,13 @@ export const Index = () => {
 
   const mostrarBebidas = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/bebidas");
+      const response = await fetch("http://127.0.0.1:8000/api/bebidas", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
       const data = await response.json();
       const { bebidas } = data;
       setBebidas(bebidas);
@@ -77,6 +83,9 @@ export const Index = () => {
             `http://127.0.0.1:8000/api/bebidas/${id}`,
             {
               method: "DELETE",
+              headers: {
+                "Authorization": `Bearer ${token}`
+              },
             }
           );
           const data = await response.json();

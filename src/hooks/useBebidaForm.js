@@ -8,6 +8,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
     tipo: "",
     imagen: null,
   };
+  const token= localStorage.getItem('token');
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
@@ -59,6 +60,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
         data: formDataObj,
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`
         },
       });
 
