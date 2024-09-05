@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { ModalEditarBebida } from "../components/ModalEditarBebida";
 import { Formulario } from "./Formulario";
 import useBebida from "../hooks/useBebida";
-import { json } from "react-router-dom";
 
 export const Index = () => {
   const [bebidas, setBebidas] = useState([]);
@@ -14,6 +13,7 @@ export const Index = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useRef(null);
   const {bebidasBuscadas} = useBebida();
+
 
 
   const openModal = (bebida) => {
@@ -43,6 +43,7 @@ export const Index = () => {
     mostrarBebidas();
     
   }, []);
+
   useEffect(() => {
     // Si bebidasBuscadas tiene contenido, actualiza el estado bebidas
     if (bebidasBuscadas && bebidasBuscadas.length > 0) {
@@ -52,6 +53,9 @@ export const Index = () => {
       setBebidas([]);
     }
   }, [bebidasBuscadas]);
+
+
+
   if (loading) {
     return <Spinner />;
   }
@@ -106,6 +110,7 @@ export const Index = () => {
   };
 
 
+
   return (
     <div className="container m-auto">
       <Toast ref={toast} />
@@ -118,7 +123,7 @@ export const Index = () => {
               className="bg-white shadow-lg rounded-lg transition-all hover:scale-125"
             >
               <img
-                src={`${import.meta.env.VITE_IMAGE_URL}${bebida.imagen}`}
+                src={`http://127.0.0.1:8000/api/imagen/${bebida.imagen}`}
                 alt={bebida.nombre}
                 className="w-full h-48 object-cover"
               />
