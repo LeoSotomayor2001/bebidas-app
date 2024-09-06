@@ -14,7 +14,7 @@ export const Index = () => {
   const toast = useRef(null);
   const {bebidasBuscadas} = useBebida();
   const token= localStorage.getItem('token');
-
+  const user= JSON.parse(localStorage.getItem('user'));
 
   const openModal = (bebida) => {
     setBebidaEditar(bebida);
@@ -37,6 +37,7 @@ export const Index = () => {
       });
       const data = await response.json();
       const { bebidas } = data;
+
       setBebidas(bebidas);
     } catch (error) {
       console.log(error);
@@ -44,7 +45,7 @@ export const Index = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     mostrarBebidas();
     
@@ -136,27 +137,32 @@ export const Index = () => {
                 alt={bebida.nombre}
                 className="w-full h-48 object-cover"
               />
+              
               <div className="p-4">
                 <h2 className="text-xl font-bold">{bebida.nombre}</h2>
                 <p className="text-gray-600">{bebida.tipo}</p>
-                <div className="flex justify-between">
-                  <button
-                    className="bg-red-500 text-white p-1 mt-2 rounded-lg"
-                    type="button"
-                    onClick={() => deleteBebida(bebida.id)}
-                  >
-                    Borrar
-                  </button>
+                {(bebida.user_id === user.id) &&
+                  <div className="flex justify-between">
+                    <button
+                      className="bg-red-500 text-white p-1 mt-2 rounded-lg"
+                      type="button"
+                      onClick={() => deleteBebida(bebida.id)}
+                    >
+                      Borrar
+                    </button>
 
-                  <button
-                    className="bg-sky-500 text-white p-1 mt-2 rounded-lg"
-                    type="button"
-                    onClick={() => openModal(bebida)}
-                  >
-                    Editar
-                  </button>
-                </div>
+                    <button
+                      className="bg-sky-500 text-white p-1 mt-2 rounded-lg"
+                      type="button"
+                      onClick={() => openModal(bebida)}
+                    >
+                      Editar
+                    </button>
+                  </div>
+                  
+                }
               </div>
+                <p className="text-gray-600 text-sm text-center">Creada por {bebida.user.name}</p>
             </div>
           ))}
         </div>

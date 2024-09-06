@@ -14,6 +14,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const onChange = (e) => {
     const { id, value } = e.target;
@@ -40,7 +41,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
     const formDataObj = new FormData();
     formDataObj.append("nombre", formData.nombre);
     formDataObj.append("tipo", formData.tipo);
-
+    formDataObj.append("user_id", user.id);
     if (formData.imagen) {
       formDataObj.append("imagen", formData.imagen);
     }
