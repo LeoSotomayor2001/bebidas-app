@@ -12,7 +12,6 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('')
   const [errors, setErrors] = useState([])
-  const { setIsValidUser } = useBebida()
   const toast = useRef(null);
   const navigate=useNavigate()
   const onChange = (e) => {
@@ -37,8 +36,8 @@ export const LoginPage = () => {
           },
         }
       );
+      console.log(data)
       if(data){
-        setIsValidUser(true)
         toast.current.show({severity:'success', summary: 'Iniciando sesión', detail: data.message, life: 3000});
         setEmail('');
         setPassword('');

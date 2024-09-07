@@ -7,12 +7,11 @@ import { Formulario } from "./Formulario";
 import useBebida from "../hooks/useBebida";
 
 export const Index = () => {
-  const [bebidas, setBebidas] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [bebidaEditar, setBebidaEditar] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useRef(null);
-  const {bebidasBuscadas} = useBebida();
+  const {bebidasBuscadas,bebidas,setBebidas,loading,mostrarBebidas} = useBebida();
   const token= localStorage.getItem('token');
   const user= JSON.parse(localStorage.getItem('user'));
 
@@ -26,25 +25,6 @@ export const Index = () => {
     setBebidaEditar(null);
   };
 
-  const mostrarBebidas = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/bebidas", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      const { bebidas } = data;
-
-      setBebidas(bebidas);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
   
   useEffect(() => {
     mostrarBebidas();

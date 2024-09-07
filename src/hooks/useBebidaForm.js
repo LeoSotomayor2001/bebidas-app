@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useBebida from "./useBebida";
 
 export const useBebidaForm = (initialBebida = null, closeModal = null) => {
   const initialState = initialBebida || {
@@ -15,6 +16,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const user = JSON.parse(localStorage.getItem("user"));
+  const {mostrarBebidas}=useBebida();
 
   const onChange = (e) => {
     const { id, value } = e.target;
@@ -74,9 +76,8 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
           });
           setTimeout(() => {
             if (closeModal) closeModal();
-
-            window.location.reload();
-          }, 2000);
+            mostrarBebidas();
+          }, 1000);
         } else {
           toast.current.show({
             severity: "success",

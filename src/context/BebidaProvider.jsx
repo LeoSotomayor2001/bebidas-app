@@ -5,7 +5,8 @@ const BebidaContext=createContext();
 
 const BebidaProvider=({children})=>{
     const [bebidasBuscadas, setBebidasBuscadas] = useState({})
-    const [isValidUser, setIsValidUser] = useState(false)
+    const [bebidas, setBebidas] = useState([]);
+    const [loading, setLoading] = useState(true);
     const token= localStorage.getItem('token');
     const BuscarBebidas=async(nombre)=>{
         let url = `http://127.0.0.1:8000/api/bebidas/search?nombre=${nombre}`;
@@ -24,13 +25,35 @@ const BebidaProvider=({children})=>{
             console.log(error)
         }
     }
+    const mostrarBebidas = async () => {
+        try {
+          const response = await fetch("http://127.0.0.1:8000/api/bebidas", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+          });
+          const data = await response.json();
+          const { bebidas } = data;
+    
+          setBebidas(bebidas);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
     return (
         <BebidaContext.Provider value={{
             BuscarBebidas,
             bebidasBuscadas,
-            isValidUser,
-            setIsValidUser
+            bebidas,
+            mostrarBebidas,
+            loading,
+            setBebidas,
+
         }}>
             {children}
         </BebidaContext.Provider>
