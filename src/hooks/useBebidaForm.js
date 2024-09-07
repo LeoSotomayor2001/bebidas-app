@@ -16,7 +16,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const user = JSON.parse(localStorage.getItem("user"));
-  const {mostrarBebidas}=useBebida();
+  const {mostrarBebidas,fetchBebidasFavoritas}=useBebida();
 
   const onChange = (e) => {
     const { id, value } = e.target;
@@ -77,6 +77,7 @@ export const useBebidaForm = (initialBebida = null, closeModal = null) => {
           setTimeout(() => {
             if (closeModal) closeModal();
             mostrarBebidas();
+            fetchBebidasFavoritas();
           }, 1000);
         } else {
           toast.current.show({

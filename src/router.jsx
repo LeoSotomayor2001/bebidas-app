@@ -5,6 +5,7 @@ import { Formulario } from './views/Formulario';
 import { AuthLayout } from './layout/AuthLayout';
 import { LoginPage } from './views/Auth/LoginPage';
 import { RegisterPage } from "./views/Auth/RegisterPage";
+import { BebidasFavoritas } from "./views/BebidasFavoritas";
 /*
 
 export const AppRouter = () => {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Index/>
+      },
+      {
+        path: "/bebidas-favoritas",
+        element: <BebidasFavoritas/>
       },
       {
         path: "/crear",

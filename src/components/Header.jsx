@@ -78,6 +78,18 @@ export const Header = () => {
             </li>
             <li>
               <NavLink
+                to="/bebidas-favoritas"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-600 font-semibold border-b-2 border-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
+                }
+              >
+                Bebidas Favoritas
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/crear"
                 className={({ isActive }) =>
                   isActive
