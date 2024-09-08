@@ -36,7 +36,7 @@ export const LoginPage = () => {
           },
         }
       );
-      console.log(data)
+
       if(data){
         toast.current.show({severity:'success', summary: 'Iniciando sesión', detail: data.message, life: 3000});
         setEmail('');

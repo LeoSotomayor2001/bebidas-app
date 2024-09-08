@@ -128,7 +128,8 @@ const BebidaProvider=({children})=>{
             deleteBebida,
             toast,
             fetchBebidasFavoritas,
-            bebidasFavoritas
+            bebidasFavoritas,
+            token
 
         }}>
             {children}
