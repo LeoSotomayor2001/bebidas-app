@@ -55,7 +55,7 @@ export const Index = () => {
           openModal={openModal}
         />
       ) : (
-        <p className="text-center text-xl font-bold text-gray-700">
+        <p className="text-center text-2xl font-bold text-gray-700">
           No hay bebidas disponibles
         </p>
       )}

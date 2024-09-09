@@ -29,6 +29,7 @@ const BebidaProvider=({children})=>{
         }
     }
     const mostrarBebidas = async () => {
+      setLoading(true);
         try {
           const response = await fetch("http://127.0.0.1:8000/api/bebidas", {
             method: "GET",
@@ -48,6 +49,7 @@ const BebidaProvider=({children})=>{
         }
       };
       const fetchBebidasFavoritas = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/bebidas/favoritas', {
                 headers: {

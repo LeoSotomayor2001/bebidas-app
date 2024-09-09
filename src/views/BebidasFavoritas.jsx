@@ -42,7 +42,9 @@ export const BebidasFavoritas = () => {
                     openModal={openModal}
                 />
             ) : (
-                <p>No tienes bebidas favoritas.</p>
+                <p className="text-center text-2xl font-bold text-gray-700">
+                    No tienes bebidas favoritas.
+                </p>
             )}
             <ModalEditarBebida
                 isOpen={modalIsOpen}
