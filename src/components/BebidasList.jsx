@@ -8,6 +8,7 @@ export const BebidasList = ({ bebidas, user, openModal }) => {
   const token = localStorage.getItem('token');
   const toast = useRef(null);
   const [favoritas, setFavoritas] = useState({});
+  
 
   useEffect(() => {
     const fetchFavorites = async () => {
