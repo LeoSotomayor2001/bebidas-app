@@ -6,6 +6,7 @@ import { AuthLayout } from './layout/AuthLayout';
 import { LoginPage } from './views/Auth/LoginPage';
 import { RegisterPage } from "./views/Auth/RegisterPage";
 import { BebidasFavoritas } from "./views/BebidasFavoritas";
+import { NotFound } from "./views/NotFound";
 /*
 
 export const AppRouter = () => {
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <h1>404 not found</h1>
+    element: <NotFound/>
   }
 ]);
 
