@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Spinner } from "../components/Spinner";
 import { Toast } from "primereact/toast";
 import { ModalEditarBebida } from "../components/ModalEditarBebida";
@@ -10,7 +10,7 @@ export const Index = () => {
 
   const [bebidaEditar, setBebidaEditar] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const {bebidasBuscadas,bebidas,setBebidas,loading,mostrarBebidas,toast} = useBebida();
+  const { bebidasBuscadas, bebidas, setBebidas, loading, mostrarBebidas, toast, activePageValue } = useBebida();
   const user= JSON.parse(localStorage.getItem('user'));
 
   const openModal = (bebida) => {
@@ -23,7 +23,6 @@ export const Index = () => {
     setBebidaEditar(null);
   };
 
-  
   useEffect(() => {
     mostrarBebidas();
     
@@ -53,6 +52,7 @@ export const Index = () => {
           bebidas={bebidas}
           user={user}
           openModal={openModal}
+          activePage = {activePageValue.index}
         />
       ) : (
         <p className="text-center text-2xl font-bold text-gray-700">

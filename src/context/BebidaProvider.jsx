@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useRef, useState } from "react"
 import Swal from "sweetalert2";
+import PropTypes from "prop-types"
 
 const BebidaContext=createContext();
 
@@ -29,7 +30,7 @@ const BebidaProvider=({children})=>{
         }
     }
     const mostrarBebidas = async () => {
-      
+        setLoading(true)
         try {
           const response = await fetch("http://127.0.0.1:8000/api/bebidas", {
             method: "GET",
@@ -49,7 +50,7 @@ const BebidaProvider=({children})=>{
         }
       };
       const fetchBebidasFavoritas = async () => {
-        
+        setLoading(true)
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/bebidas/favoritas', {
                 headers: {
@@ -119,6 +120,11 @@ const BebidaProvider=({children})=>{
         });
       };
 
+  const activePageValue = {
+    index: 1,
+    bebidasFavoritas: 2
+  }
+
     return (
         <BebidaContext.Provider value={{
             BuscarBebidas,
@@ -131,7 +137,8 @@ const BebidaProvider=({children})=>{
             toast,
             fetchBebidasFavoritas,
             bebidasFavoritas,
-            token
+            token,
+            activePageValue
 
         }}>
             {children}
@@ -139,5 +146,10 @@ const BebidaProvider=({children})=>{
     )
 }
 
+BebidaProvider.propTypes = {
+  children: PropTypes.object,
+};
+
 export {BebidaProvider}
 export default BebidaContext
+
