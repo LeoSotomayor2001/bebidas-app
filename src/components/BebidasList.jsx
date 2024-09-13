@@ -4,46 +4,48 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import PropTypes from "prop-types"
 
-export const BebidasList = ({ bebidas, user, openModal, activePage}) => {
-  const { deleteBebida } = useBebida();
+export const BebidasList = ({ bebidas, user, openModal, activePage }) => {
+  const { deleteBebida,fetchBebidasFavoritas } = useBebida();
   const token = localStorage.getItem('token');
   const toast = useRef(null);
 
-  
-
-  
   const addFavorite = async (id) => {
     const url = `http://127.0.0.1:8000/api/bebidas/${id}/favorita`;
     try {
-        const {data} = await axios.post(url, {}, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if(data){
-            toast.current.show({severity:'success', summary: 'Bebida favorita', detail: data.message, life: 2000});
-           
+      const { data } = await axios.post(url, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-    } catch (error) {
-        console.log(error);
-    }
-}
-const removeFavorite = async (id) => {
-  const url = `http://127.0.0.1:8000/api/bebidas/${id}/favorita`;
-  try {
-    const { data } = await axios.delete(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      });
+      if (data) {
+        toast.current.show({ severity: 'success', summary: 'Bebida favorita', detail: data.message, life: 2000 });
+
       }
-    });
-    if (data) {
-     
-      toast.current.show({ severity: 'info', summary: 'Bebida eliminada de favoritas', detail: data.message, life: 3000 });
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
-};
+  const removeFavorite = async (id) => {
+    const url = `http://127.0.0.1:8000/api/bebidas/${id}/favorita`;
+    try {
+      const { data } = await axios.delete(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (data) {
+
+        toast.current.show({ severity: 'info', summary: 'Bebida eliminada de favoritas', detail: data.message, life: 3000 });
+
+        setTimeout(() => {
+          fetchBebidasFavoritas();
+          
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -54,7 +56,7 @@ const removeFavorite = async (id) => {
           className="bg-white shadow-lg rounded-lg transition-all hover:scale-125"
         >
           <img
-            src={`http://127.0.0.1:8000/api/imagen/${bebida.imagen}`}
+            src={bebida.imagen!=='no image' ? `http://127.0.0.1:8000/api/imagen/${bebida.imagen}` : '/img/404.svg'}
             alt={bebida.nombre}
             className="w-full h-48 object-cover"
           />
@@ -95,10 +97,9 @@ const removeFavorite = async (id) => {
   );
 };
 
-
 BebidasList.propTypes = {
-  bebidas: PropTypes.array, 
-  user: PropTypes.object, 
+  bebidas: PropTypes.array,
+  user: PropTypes.object,
   openModal: PropTypes.bool,
   activePage: PropTypes.number
 };
